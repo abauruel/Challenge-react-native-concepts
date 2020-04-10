@@ -26,14 +26,15 @@ export default function App() {
     const response = await api.post(`repositories/${id}/like`);
     const { likes } = response.data;
 
-    const repoIdx = repositories.findIndex((repo) => repo.id === id);
+    const repositoriesRefreshed = repositories.map((repository) => {
+      if (repository.id === id) {
+        return { ...repository, likes };
+      } else {
+        return repository;
+      }
+    });
 
-    repositories[repoIdx] = {
-      ...repositories[repoIdx],
-      likes,
-    };
-
-    setRepositories([...repositories]);
+    setRepositories(repositoriesRefreshed);
   }
 
   return (
